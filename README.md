@@ -7,10 +7,10 @@ Increase your Git commit history and build green streaks on your GitHub profile 
 ### 1. Create a New Private Repository on GitHub
 1. Go to [GitHub](https://github.com) and log in.
 2. Click the **+** icon in the top right corner and select **New repository**.
-3. Name your repository (e.g., `commit-history`).
+3. Name your repository (e.g., `my-repo`).
 4. Set the visibility to **Private** (recommended) or Public.
 5. Click **Create repository**.
-6. Copy the repository URL (e.g., `https://github.com/your-username/commit-history.git`).
+6. Copy the repository URL (e.g., `https://github.com/your-username/my-repo.git`).
 
 ### 2. Download and Run the Script
 1. Download or clone this project folder to your local machine.
