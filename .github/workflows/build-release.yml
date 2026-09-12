@@ -20,7 +20,7 @@ jobs:
             runner: windows-latest
             artifact: GitBloom-Windows-x64.exe
           - name: macOS
-            runner: macos-13
+            runner: macos-15-intel
             artifact: GitBloom-macOS.dmg
           - name: Linux x64
             runner: ubuntu-latest

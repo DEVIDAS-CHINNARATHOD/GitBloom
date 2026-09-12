@@ -36,7 +36,7 @@ python3 -m pip install --upgrade pyinstaller
 python3 -m PyInstaller \
   --noconfirm \
   --clean \
-  --onefile \
+  --onedir \
   --windowed \
   --name "GitBloom-macOS" \
   --icon "$ICON_ICNS" \
@@ -49,6 +49,11 @@ python3 -m PyInstaller \
 
 if ! command -v hdiutil >/dev/null 2>&1; then
   echo "hdiutil is required to create the macOS DMG." >&2
+  exit 1
+fi
+if [[ ! -d "$BUILD_DIR/dist/GitBloom-macOS.app" ]]; then
+  echo "PyInstaller did not create GitBloom-macOS.app." >&2
+  find "$BUILD_DIR/dist" -maxdepth 2 -print >&2 || true
   exit 1
 fi
 
