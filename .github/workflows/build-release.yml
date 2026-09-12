@@ -1,0 +1,95 @@
+name: Build GitBloom release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows x64
+            runner: windows-latest
+            artifact: GitBloom-Windows-x64.exe
+          - name: macOS
+            runner: macos-13
+            artifact: GitBloom-macOS.dmg
+          - name: Linux x64
+            runner: ubuntu-latest
+            artifact: GitBloom-Linux-x86_64.AppImage
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install AppImage tool
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          curl -fsSL \
+            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage \
+            -o "$RUNNER_TEMP/appimagetool"
+          chmod +x "$RUNNER_TEMP/appimagetool"
+          sudo install -m 0755 "$RUNNER_TEMP/appimagetool" /usr/local/bin/appimagetool
+
+      - name: Build Windows executable
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\packaging\build-windows.ps1
+
+      - name: Build macOS DMG
+        if: runner.os == 'macOS'
+        shell: bash
+        run: ./packaging/build-macos.sh
+
+      - name: Build Linux AppImage
+        if: runner.os == 'Linux'
+        shell: bash
+        run: APPIMAGE_EXTRACT_AND_RUN=1 GITBLOOM_ONLY_APPIMAGE=1 ./packaging/build-linux.sh
+
+      - name: Upload platform artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: release/v*/${{ matrix.artifact }}
+          if-no-files-found: error
+
+  assemble:
+    name: Assemble three release files
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download platform artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release
+          merge-multiple: true
+
+      - name: Put files in one versioned release folder
+        shell: bash
+        run: |
+          VERSION="$(sed -n 's/^__version__ = "\(.*\)"/\1/p' gitbloom/__init__.py)"
+          mkdir -p "release/v$VERSION"
+          find release -maxdepth 1 -type f -exec mv {} "release/v$VERSION/" \;
+          test "$(find "release/v$VERSION" -maxdepth 1 -type f | wc -l)" -eq 3
+          find "release/v$VERSION" -maxdepth 1 -type f -printf '%f\n' | sort
+
+      - name: Upload one clean release folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: GitBloom-release
+          path: release/v*/
+          if-no-files-found: error

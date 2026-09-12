@@ -1,0 +1,23 @@
+Name: gitbloom
+Version: @VERSION@
+Release: 1%{?dist}
+Summary: GitBloom desktop application
+License: MIT
+BuildArch: x86_64
+
+%description
+Create an organized Git commit timeline from project files.
+
+%prep
+
+%build
+
+%install
+install -D -m 0755 %{_sourcedir}/GitBloom %{buildroot}%{_bindir}/GitBloom
+install -D -m 0644 %{_sourcedir}/GitBloom.desktop %{buildroot}%{_datadir}/applications/GitBloom.desktop
+install -D -m 0644 %{_sourcedir}/GitBloom.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/GitBloom.svg
+
+%files
+%{_bindir}/GitBloom
+%{_datadir}/applications/GitBloom.desktop
+%{_datadir}/icons/hicolor/scalable/apps/GitBloom.svg

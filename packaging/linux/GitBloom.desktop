@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=GitBloom
+Comment=Create an organized Git commit timeline
+Exec=GitBloom
+Terminal=false
+Categories=Development;Utility;
+Icon=GitBloom

@@ -1,0 +1,2 @@
+# GitBloom V2.1 uses Python standard-library modules only.
+# System requirements: Python 3.10+, Git, and Tkinter.

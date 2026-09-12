@@ -1,0 +1,28 @@
+# Python cache and tooling
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# PyInstaller and build output
+build/
+dist/
+release/
+*.spec
+
+# Local operating-system files and editors
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Temporary GitBloom workspaces and logs
+gitbloom-*/
+*.log

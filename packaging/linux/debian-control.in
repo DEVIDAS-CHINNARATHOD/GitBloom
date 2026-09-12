@@ -1,0 +1,8 @@
+Package: gitbloom
+Version: @VERSION@
+Section: devel
+Priority: optional
+Architecture: amd64
+Maintainer: GitBloom contributors
+Description: GitBloom desktop application
+ Create an organized Git commit timeline from project files.

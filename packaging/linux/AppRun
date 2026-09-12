@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+HERE="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+exec "$HERE/usr/bin/GitBloom" "$@"
