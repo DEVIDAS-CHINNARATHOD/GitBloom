@@ -10,8 +10,26 @@ permissions:
   contents: read
 
 jobs:
+  prepare:
+    name: Read release version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        shell: bash
+        run: |
+          VERSION="$(sed -n 's/^__version__ = "\(.*\)"/\1/p' gitbloom/__init__.py)"
+          test -n "$VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
   build:
     name: Build ${{ matrix.name }}
+    needs: prepare
     strategy:
       fail-fast: false
       matrix:
@@ -69,12 +87,9 @@ jobs:
 
   assemble:
     name: Assemble three release files
-    needs: build
+    needs: [prepare, build]
     runs-on: ubuntu-latest
     steps:
-      - name: Check out source for version
-        uses: actions/checkout@v4
-
       - name: Download platform artifacts
         uses: actions/download-artifact@v4
         with:
@@ -84,7 +99,7 @@ jobs:
       - name: Put files in one versioned release folder
         shell: bash
         run: |
-          VERSION="$(sed -n 's/^__version__ = "\(.*\)"/\1/p' gitbloom/__init__.py)"
+          VERSION="${{ needs.prepare.outputs.version }}"
           mkdir -p "release/v$VERSION"
           find release -maxdepth 1 -type f -exec mv {} "release/v$VERSION/" \;
           test "$(find "release/v$VERSION" -maxdepth 1 -type f | wc -l)" -eq 3
