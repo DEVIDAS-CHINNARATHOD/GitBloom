@@ -2,19 +2,6 @@
 
 GitBloom creates an organized Git commit timeline from a project folder or selected files.
 
-## Features
-
-- Select a complete project folder or multiple files.
-- Automatically set the number of commits from the selected files.
-- Edit the number of commits before creating the plan.
-- Choose a start date.
-- Adjust the end date with the slider.
-- The maximum date range cannot exceed the number of commits.
-- Preview commit dates, files, and messages before processing.
-- Create commits with the planned dates.
-- Choose whether to push the commits to the remote repository.
-- Includes a GitBloom application icon.
-
 ## How to use
 
 1. Download GitBloom for your operating system from the [latest GitHub Release](https://github.com/DEVIDAS-CHINNARATHOD/GitBloom/releases/latest).
